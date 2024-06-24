@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Deevices Data Form</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width:900px; /* Increase the width as desired */
+  }
+  .logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .form-input {
+    margin-bottom: 10px;
+  }
+  input[type="text"], input[type="tel"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    display: block;
+  }
+  .button-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  #print { background-color: #4CAF50; }
+  #clear { background-color: #f44336; }
+  #export { background-color: #008CBA; }
+</style>
+</head>
+<body>
+  <div class="container">
+  <div class="logo">
+  </div>
+  <h1>Eye Advertising</h1>
+  <div class="hint">
+    <p>Hint: if you have somthing write it's information and if you haven't write like "i don't have"</p>
+</div>
+  <form id="dataForm">
+    <div class="form-input">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name">
+    </div>
+    <div class="form-input">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email">
+    </div>
+    <div class="form-input">
+      <label for="department">Department:</label>
+      <select id="specialty" name="specialty">
+        <option value="designer">Designer</option>
+        <option value="developer">Developer</option>
+        <option value="manager">Manager</option>
+        <option value="IT">IT</option>
+      </select>
+    </div>
+
+    <div class="form-input">
+        <label for="laptop">Laptop:</label>
+        <input type="laptop" id="laptop" name="laptop" placeholder="Enter your laptop brand ">
+      </div>
+
+      <div class="form-input">
+        <label for="ram size">Ram Size:</label>
+        <input type="ram" id="ram" name="ram" placeholder="Enter your ram size !">
+      </div>
+
+      <div class="form-input">
+        <label for="cpu">CPU:</label>
+        <input type="cpu" id="cpu" name="cpu" placeholder="Enter your cpu details !">
+      </div>
+
+      <div class="form-input">
+        <label for="hard size">Hard size:</label>
+        <input type="hard" id="hard" name="hard" placeholder="Enter your hard size !">
+      </div>
+
+    <div class="form-input">
+        <label for="monitor">Monitor:</label>
+        <input type="monitor" id="monitor" name="monitor" placeholder="Enter your monitor brand ">
+      </div>
+
+      <div class="form-input">
+        <label for="tablet">Tablet:</label>
+        <input type="tablet" id="tablet" name="tablet" placeholder="Enter your tablet/ipad brand ">
+      </div>
+
+      <div class="form-input">
+        <label for="router">Myfi Router:</label>
+        <input type="router" id="router" name="router" placeholder="Enter your router details">
+      </div>
+
+      <div class="form-input">
+        <label for="clicker">Clicker:</label>
+        <input type="clicker" id="clicker" name="clicker" placeholder="Enter your clicker details">
+      </div>
+      
+    <button type="button" id="print" class="button">Print</button>
+    <button type="reset" id="clear" class="button">Clear</button>
+    <button type="button" id="export" class="button">Export to Excel</button>
+  </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+<script>
+    document.getElementById('export').addEventListener('click', function() {
+        var storedData = JSON.parse(localStorage.getItem('formData')) || [];
+        storedData.push({
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            department: document.getElementById('specialty').value,
+            monitor: document.getElementById('monitor').value,
+            ram: document.getElementById('ram').value,
+            hard: document.getElementById('hard').value,
+            cpu: document.getElementById('cpu').value,
+            tablet: document.getElementById('tablet').value,
+            clicker: document.getElementById('clicker').value,
+            router: document.getElementById('router').value
+        });
+        localStorage.setItem('formData', JSON.stringify(storedData));
+    
+    // Create a new workbook and a sheet
+    var wb = XLSX.utils.book_new();
+    var ws_name = "SheetJS";
+    
+    // Include headers
+    var ws_data = [["Name", "Email","tablet","clicker","router","cpu","hard","ram", "Monitor", "Specialty"]];
+    
+    // Add stored data
+    storedData.forEach(function(entry) {
+      ws_data.push([entry.name, entry.email,entry.tablet,entry.clicker,entry.router,entry.ram,entry.cpu,entry.hard, entry.monitor, entry.department]);
+    });
+    
+    // Create a worksheet
+    var ws = XLSX.utils.aoa_to_sheet(ws_data);
+    
+    // Append the worksheet to the workbook
+    XLSX.utils.book_append_sheet(wb, ws, ws_name);
+    
+    // Export the workbook
+    XLSX.writeFile(wb, "form_data.xlsx");
+  });
+  
+</script>
+</body>
+</html>
